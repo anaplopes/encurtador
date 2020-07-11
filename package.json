@@ -1,0 +1,21 @@
+{
+  "name": "api-encurtador",
+  "version": "1.0.0",
+  "description": "encurtador de URL, recebe uma URL e retorna uma outra menor que a original",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "nodemon ./dist/server.js"
+  },
+  "author": "anapaulalopes",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/express": "^4.17.5",
+    "nodemon": "^2.0.4",
+    "typescript": "^3.9.6"
+  },
+  "dependencies": {
+    "express": "^4.17.1",
+    "uuidv4": "^6.1.1"
+  }
+}
