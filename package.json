@@ -11,11 +11,15 @@
   "license": "ISC",
   "devDependencies": {
     "@types/express": "^4.17.5",
+    "@types/shortid": "0.0.29",
     "nodemon": "^2.0.4",
     "typescript": "^3.9.6"
   },
   "dependencies": {
+    "@types/shortid": "0.0.29",
     "express": "^4.17.1",
+    "mongoose": "^5.9.23",
+    "shortid": "^2.2.15",
     "uuidv4": "^6.1.1"
   }
 }
