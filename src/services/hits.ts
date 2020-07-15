@@ -1,31 +1,34 @@
 import { getRepository } from 'typeorm';
-import HitsModel from '../models/hits';
 import UrlsModel from '../models/urls';
 
 
 export default class HitsService {
 
     async statsGeneral() {
-        const repository = getRepository(HitsModel);
+        const repository = getRepository(UrlsModel);
 
-        const searchUser = await repository.find()
+        const hits = await repository
+        .createQueryBuilder('urls')
+        .select('SUM(urls.hits)')
+        .where('urls.isActive = true')
+        .getRawOne(); // Quantidade de hits em todas as urls do sistema
+        
+        const urlCount = await repository.count({isActive: true}); // Quantidade de urls cadastradas
+
+        const topUrls = await repository
+        .createQueryBuilder('urls')
+        .select('urls.id, urls.hits, urls.url, urls.shortUrl')
+        .where('urls.isActive = true')
+        .orderBy('hits', 'DESC')
+        .limit(10)
+        .getRawMany(); // 10 Urls mais acessadas
+        
         return {
             statusCode: 200,
             content: {
-                "hits": 193841,
-                "urlCount": 2512,
-                "topUrls": [
-                    {
-                    "id": "23094",
-                    "hits": 153,
-                    "url": "http://www.renault.com.br/folks", "shortUrl": "http://<host>[:<port>]/asdfeiba"
-                    },
-                    {
-                    "id": "23090",
-                    "hits": 89,
-                    "url": "http://www.chaordic.com.br/chaordic", "shortUrl": "http://<host>[:<port>]/asdfeiba"
-                    }
-                ]
+                hits: hits,
+                urlCount: urlCount,
+                topUrls: topUrls
             }
         }
     }
@@ -33,15 +36,15 @@ export default class HitsService {
     async statsUrls(id:string) {
         const repository = getRepository(UrlsModel);
 
-        const searchUser = await repository.findOne({id: id, isActive: true});
-        if (searchUser) {
+        const searchUrl = await repository.findOne({id: id, isActive: true});
+        if (searchUrl) {
             return {
                 statusCode: 200,
                 content: {
-                    id: searchUser.id,
-                    hits: searchUser.hits,
-                    url: searchUser.url,
-                    shortUrl: searchUser.shortUrl
+                    id: searchUrl.id,
+                    hits: searchUrl.hits,
+                    url: searchUrl.url,
+                    shortUrl: searchUrl.shortUrl
                 }
             }
         }

@@ -1,33 +1,42 @@
 import { getRepository } from 'typeorm';
 import UsersModel from '../models/users';
+import UrlsModel from '../models/urls';
 
 
 export default class UsersService {
 
     async statsUsers(userid:string) {
-        const repository = getRepository(UsersModel);
+        const repository = getRepository(UrlsModel);
 
-        const searchUser = await repository.findOne({id: userid, isActive: true})
-        if (searchUser) {
+        const searchUrl = await repository.find({user: userid});
+
+        if (searchUrl) {
+            const hits = await repository
+            .createQueryBuilder('urls')
+            .select('SUM(urls.hits)')
+            .where('urls.user = :user', {user: userid})
+            .andWhere('urls.isActive = true')
+            .getRawOne(); // Quantidade de hits em todas as urls do usuario
+
+            const urlCount = await repository.count({user: userid, isActive: true}); // Quantidade de urls cadastradas do usuario
+
+            const topUrls = await repository
+            .createQueryBuilder('urls')
+            .select('urls.id, urls.hits, urls.url, urls.shortUrl')
+            .where('urls.user = :user', {user: userid})
+            .andWhere('urls.isActive = true')
+            .orderBy('hits', 'DESC')
+            .limit(10)
+            .getRawMany(); // 10 Urls mais acessadas do usuario
+
             return {
-                statusCode: 200,
-                content: {
-                    "hits": 193841,
-                    "urlCount": 2512,
-                    "topUrls": [
-                        {
-                        "id": "23094",
-                        "hits": 153,
-                        "url": "http://www.renault.com.br/folks", "shortUrl": "http://<host>[:<port>]/asdfeiba"
-                        },
-                        {
-                        "id": "23090",
-                        "hits": 89,
-                        "url": "http://www.chaordic.com.br/chaordic", "shortUrl": "http://<host>[:<port>]/asdfeiba"
-                        }
-                    ]
-                }
+            statusCode: 200,
+            content: {
+                hits: hits,
+                urlCount: urlCount,
+                topUrls: topUrls
             }
+        }
         }                                       
 
         return {
@@ -39,7 +48,7 @@ export default class UsersService {
     async createUsers(payload:any) {
         const repository = getRepository(UsersModel);
 
-        const searchUser = await repository.findOne({cpf: payload.cpf, isActive: true})
+        const searchUser = await repository.findOne({cpf: payload.cpf, isActive: true});
         if (searchUser) {
             return {
                 statusCode: 409,
@@ -50,7 +59,7 @@ export default class UsersService {
             }
         }
 
-        const newUser = await repository.save(payload)
+        const newUser = await repository.save(payload);
         return {
             statusCode: 201,
             content: {id: newUser.id }
@@ -60,7 +69,7 @@ export default class UsersService {
     async deleteUsers(userid:string) {
         const repository = getRepository(UsersModel);
 
-        const searchUser = await repository.findOne({id: userid, isActive: true})
+        const searchUser = await repository.findOne({id: userid, isActive: true});
         if (searchUser) {
             searchUser.isActive = false;
             await repository.save(searchUser);

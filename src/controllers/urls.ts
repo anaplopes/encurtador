@@ -4,7 +4,7 @@ import UrlsService from '../services/urls';
 
 const urlsRouter = Router();
 
-urlsRouter.get('/:id', async(req, res, next) => {
+urlsRouter.get('/:id', async(req, res) => {
     // Redirect original url
 
     try {

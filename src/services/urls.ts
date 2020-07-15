@@ -8,8 +8,10 @@ export default class UrlsService {
     async getUrls(id:string) {
         const repository = getRepository(UrlsModel);
 
-        const searchUrl = await repository.findOne({id: id, isActive: true})
+        const searchUrl = await repository.findOne({id: id, isActive: true});
         if (searchUrl) {
+            searchUrl.hits = searchUrl.hits + 1;
+            await repository.save(searchUrl);
             return {
                 statusCode: 301,
                 content: searchUrl.url
@@ -25,7 +27,7 @@ export default class UrlsService {
     async deleteUrls(id:string) {
         const repository = getRepository(UrlsModel);
 
-        const searchUrl = await repository.findOne({id: id, isActive: true})
+        const searchUrl = await repository.findOne({id: id, isActive: true});
         if (searchUrl) {
             searchUrl.isActive = false;
             await repository.save(searchUrl);
@@ -52,7 +54,7 @@ export default class UrlsService {
             }
         }
 
-        const searchUrl = await repository.findOne({url: url, isActive: true})
+        const searchUrl = await repository.findOne({url: url, isActive: true});
         if (searchUrl) {
             return {
                 statusCode: 409,
