@@ -1,16 +1,22 @@
-import { uuid } from 'uuidv4';
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn } from 'typeorm';
 
 
+@Entity('hits')
 export default class HitsModel {
-    id: string;
-    url: string;
-    shortUrl: string;
-    user: string;
 
-    constructor({url, shortUrl, user}: Omit<HitsModel, 'id'>){
-        this.id = uuid();
-        this.url = url;
-        this.shortUrl = shortUrl;
-        this.user = user;
-    }
+    @PrimaryGeneratedColumn('uuid')
+    id: string;
+
+    @Column()
+    url: string;
+
+    @Column()
+    shortUrl: string;
+
+    @Column()
+    user: string;
+    
+    @CreateDateColumn({default: 'now()'})
+    createdAt: Date;
+
 }

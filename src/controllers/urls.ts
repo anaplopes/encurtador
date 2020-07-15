@@ -1,20 +1,47 @@
 import { Router } from 'express';
+import UrlsService from '../services/urls';
 
 
 const urlsRouter = Router();
 
-urlsRouter.get('/:id', (req, res) => {
-    // Deve retornar um 301 redirect para o endereço original da URL
-    // Caso o id não existe no sistema, o retorno deverá ser um 404 Not Found
+urlsRouter.get('/:id', async(req, res, next) => {
+    // Redirect original url
 
-    throw Error('Ainda não foi implementado.');
+    try {
+        const {id} = req.params;
+        const service = new UrlsService();
+        const response = await service.getUrls(id);
+        if (response.statusCode == 301) {
+            const url:any = response.content
+            res.redirect(response.statusCode, url)
+        } else {
+            res.status(response.statusCode).json(response.content);
+        }
+    }
+    catch (err) {
+        console.log(err);
+        res.json({
+            erro: err.message,
+        })
+    }
 });
 
 
-urlsRouter.delete('/:id', (req, res) => {
-    // Apaga uma URL do sistema (duh!). Deverá retornar vazio em caso de sucesso
+urlsRouter.delete('/:id', async(req, res) => {
+    // Delete url
     
-    throw Error('Ainda não foi implementado.');
+    try {
+        const service = new UrlsService();
+        const {id} = req.params;
+        const response = await service.deleteUrls(id);
+        res.status(response.statusCode).json(response.content);
+    }
+    catch (err) {
+        console.log(err);
+        res.json({
+            erro: err.message,
+        })
+    }
 });
 
 

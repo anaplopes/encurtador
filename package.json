@@ -1,25 +1,28 @@
 {
-  "name": "api-encurtador",
-  "version": "1.0.0",
-  "description": "encurtador de URL, recebe uma URL e retorna uma outra menor que a original",
-  "main": "index.js",
-  "scripts": {
-    "build": "tsc",
-    "start": "nodemon ./dist/server.js"
-  },
-  "author": "anapaulalopes",
-  "license": "ISC",
-  "devDependencies": {
-    "@types/express": "^4.17.5",
-    "@types/shortid": "0.0.29",
-    "nodemon": "^2.0.4",
-    "typescript": "^3.9.6"
-  },
-  "dependencies": {
-    "@types/shortid": "0.0.29",
-    "express": "^4.17.1",
-    "shortid": "^2.2.15",
-    "ts-node": "^8.10.2",
-    "uuidv4": "^6.1.1"
-  }
+   "name": "encurtador",
+   "version": "0.0.1",
+   "description": "Api encurtador de URL, recebe uma URL e retorna uma outra menor que a original",
+   "main": "app.ts",
+   "scripts": {
+      "build": "tsc",
+      "dev": "ts-node --inspect --transpileOnly --ignore-watch node_modules src/server.ts",
+      "start": "nodemon ./dist/server.js",
+      "typeorm": "node --require ts-node/register ./node_modules/typeorm/cli.js"
+   },
+   "devDependencies": {
+      "@types/express": "^4.17.7",
+      "ts-node": "3.3.0",
+      "typescript": "3.3.3333"
+   },
+   "dependencies": {
+      "@types/node": "^8.0.29",
+      "@types/shortid": "0.0.29",
+      "express": "^4.17.1",
+      "nodemon": "^2.0.4",
+      "pg": "^8.3.0",
+      "reflect-metadata": "^0.1.10",
+      "shortid": "^2.2.15",
+      "typeorm": "0.2.25",
+      "uuidv4": "^6.1.1"
+   }
 }

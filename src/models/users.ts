@@ -1,14 +1,19 @@
-import { uuid } from 'uuidv4';
+import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 
 
+@Entity('users')
 export default class UsersModel {
-    id: string;
-    name: string;
-    ativo: boolean;
 
-    constructor({name, ativo}: Omit<UsersModel, 'id'>){
-        this.id = uuid();
-        this.name = name;
-        this.ativo = ativo;
-    }
+    @PrimaryGeneratedColumn('uuid')
+    id: string;
+
+    @Column({length: 100, nullable: false})
+    name: string;
+
+    @Column({length: 12, nullable: false})
+    cpf: string;
+
+    @Column({default: true})
+    isActive: boolean;
+
 }

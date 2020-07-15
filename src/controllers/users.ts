@@ -1,48 +1,74 @@
 import { Router } from 'express';
+import UsersService from '../services/users';
 import UrlsService from '../services/urls';
 
 
 const usersRouter = Router();
 
-usersRouter.post('/:userid/urls', (req, res) => {    
+usersRouter.get('/:userid/stats', async(req, res) => {
+    // Get stats user
+
     try {
-        const service = new UrlsService();
+        const service = new UsersService();
         const {userid} = req.params;
-        const {url} = req.body;
-        const response = service.createUrl(userid, url);
-        res.status(201).json(response);
+        const response = await service.statsUsers(userid);
+        res.status(response.statusCode).json(response.content);
     }
     catch (err) {
         res.json({
             erro: err.message,
-        });
+        })
     }
 });
 
+usersRouter.post('/', async(req, res) => {
+    // Create user
 
-usersRouter.get('/:userid/stats', (req, res) => {
-    // Retorna estatísticas das urls de um usuário. O resultado é o mesmo que GET /stats mas com o escopo dentro de um usuário
-    // Caso o usuário não exista o retorno deverá ser com código 404 Not Found
-
-    throw Error('Ainda não foi implementado.');
+    try {
+        const service = new UsersService();
+        const response = await service.createUsers(req.body);
+        res.status(response.statusCode).json(response.content);
+    }
+    catch (err) {
+        res.json({
+            erro: err.message,
+        })
+    }
 });
 
-
-usersRouter.post('/', (req, res) => {
-    // Cria um usuário. O conteúdo do request deverá ser com código 201 Created e retornar um objeto JSON com o conteúdo no seguinte formato. Caso já exista um usuário com o mesmo id retornar código 409 Conflict
-    // {
-    //     "id": "jibao"
-    // }
+usersRouter.delete('/:userid', async(req, res) => {
+    // Delete user
         
-
-    throw Error('Ainda não foi implementado.');
+    try {
+        const service = new UsersService();
+        const {userid} = req.params;
+        const response = await service.deleteUsers(userid);
+        res.status(response.statusCode).json(response.content);
+    }
+    catch (err) {
+        console.log(err);
+        res.json({
+            erro: err.message,
+        })
+    }
 });
 
-
-usersRouter.delete('/:userid', (req, res) => {
-    // Apaga um usuário. :)
-        
-    throw Error('Ainda não foi implementado.');
+usersRouter.post('/:userid/urls', async(req, res) => {    
+    // Create url
+    
+    try {
+        const service = new UrlsService();
+        const {userid} = req.params;
+        const {url} = req.body;
+        const response = await service.createUrl(userid, url);
+        res.status(response.statusCode).json(response.content);
+    }
+    catch (err) {
+        console.log(err);
+        res.json({
+            erro: err.message,
+        })
+    }
 });
 
 
