@@ -4,17 +4,20 @@
    "port": 5433,
    "username": "postgres",
    "password": "secretpassword",
-   "database": "renault",
+   "database": "postgres",
    "synchronize": true,
    "logging": false,
    "entities": [
-      "src/models/**/*.ts"
+      "src/models/*.ts",
+      "dist/models/*.js"
    ],
    "migrations": [
-      "src/database/migration/**/*.ts"
+      "src/database/migration/*.ts",
+      "dist/database/migration/*.js"
    ],
    "subscribers": [
-      "src/subscriber/**/*.ts"
+      "src/subscriber/*.ts",
+      "dist/subscriber/*.js"
    ],
    "cli": {
       "entitiesDir": "src/models",

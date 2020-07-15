@@ -3,19 +3,21 @@
    "version": "0.0.1",
    "description": "Api encurtador de URL, recebe uma URL e retorna uma outra menor que a original",
    "main": "app.ts",
+   "license": "ISC",
    "scripts": {
       "build": "tsc",
-      "dev": "ts-node --inspect --transpileOnly --ignore-watch node_modules src/server.ts",
-      "start": "nodemon ./dist/server.js",
+      "dev": "ts-node-dev --inspect --ignore-watch node_modules src/server.ts",
+      "start": "node dist/server.js",
       "typeorm": "node --require ts-node/register ./node_modules/typeorm/cli.js"
    },
    "devDependencies": {
-      "@types/express": "^4.17.7",
+      "ts-node-dev": "^1.0.0-pre.51",
       "ts-node": "3.3.0",
       "typescript": "3.3.3333"
    },
    "dependencies": {
       "@types/node": "^8.0.29",
+      "@types/express": "^4.17.7",
       "@types/shortid": "0.0.29",
       "express": "^4.17.1",
       "nodemon": "^2.0.4",
